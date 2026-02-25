@@ -35,6 +35,4 @@ while True:
             num = 255
         time.sleep(sleep_time)
     print(num, dec2bin(num))
-    for i in range(8):
-        GPIO.output(leds[i], num%2)
-        num = num //2
+    GPIO.output(leds, dec2bin(num))
