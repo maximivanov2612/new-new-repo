@@ -1,19 +1,15 @@
-import r2r_driver as r2r
+import r2r_dac as r2r
+import signal_generator as sg
 import time
-import math
 
-amplitude = 3
-freq = 100
-sampling_freq = 10000
-
-dac = r2r.R2R_DAC([22,27,17,26,25,21,20,16], 3.3)
-
+amplitude = 3.2
+signal_frequency = 10
+sampling_frequency = 1000
 
 try:
-    while(True):
-        t = time.time_ns()/1000000000
-        dac.setvoltage(dac.vmax/2 + amplitude * math.sin(2*math.pi*freq*t))
-        time.sleep(1/sampling_freq)
-
+    dac = r2r.R2R_DAC(([16, 20, 21, 25, 26, 17, 27, 22]), amplitude, True)
+    while True:
+        dac.set_voltage(amplitude * sg.get_sin_wave_amplitude(signal_frequency, time.monotonic()))
+        sg.wait_for_sampling_period(sampling_frequency)
 finally:
-   dac.deinit()
+    dac.deinit()
